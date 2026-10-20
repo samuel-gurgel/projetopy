@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 ## Python
 
+=======
+>>>>>>> 29ef0a4d45b27be7baab9034311e580b499c17dc
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -97,7 +100,11 @@ ipython_config.py
 #   install all needed dependencies.
 # Pipfile.lock
 
+<<<<<<< HEAD
 # UV
+=======
+# uv
+>>>>>>> 29ef0a4d45b27be7baab9034311e580b499c17dc
 #   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
@@ -168,7 +175,11 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
+<<<<<<< HEAD
 # mkdocs documentation
+=======
+# mkdocs/Zensical documentation
+>>>>>>> 29ef0a4d45b27be7baab9034311e580b499c17dc
 /site
 
 # mypy
@@ -220,6 +231,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+<<<<<<< HEAD
 
 # Generated using ignr.py - github.com/Antrikshy/ignr.py
 
+=======
+>>>>>>> 29ef0a4d45b27be7baab9034311e580b499c17dc
