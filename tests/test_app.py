@@ -1,11 +1,7 @@
 from http import HTTPStatus
 
-from fastapi.testclient import TestClient
 
-from projetopy.app import app
-
-
-def test_root_deve_retornar_ola_mundo():
+def test_root_deve_retornar_ola_mundo(client):
     """
     Esse teste tem 3 atapas (AAA)
     - A: Arrange - Arranjo
@@ -13,7 +9,6 @@ def test_root_deve_retornar_ola_mundo():
     - A: Assert  - Garante que A é A
     """
     # arrange(carrega os dados que vamos precisar)
-    client = TestClient(app)
 
     # act(faz a acao do teste)
     response = client.get('/')
@@ -23,10 +18,63 @@ def test_root_deve_retornar_ola_mundo():
     assert response.status_code == HTTPStatus.OK
 
 
-def test_exercicio_ola_mundo_em_html():
-    client = TestClient(app)
+def test_create_user(client):
 
-    response = client.get('/exercicio-html')
+    response = client.post(
+        '/users/',
+        json={
+            'username': 'alice',
+            'email': 'alice@teste.com',
+            'password': '12345',
+        },
+    )
+    assert response.status_code == HTTPStatus.CREATED
+    assert response.json() == {
+        'id': 1,
+        'username': 'alice',
+        'email': 'alice@teste.com',
+    }
+
+
+def test_read_users(client):
+    response = client.get('/users')
 
     assert response.status_code == HTTPStatus.OK
-    assert '<h1> Ola Mundo </h1>' in response.text
+    assert response.json() == {
+        'users': [
+            {
+                'id': 1,
+                'email': 'alice@teste.com',
+                'username': 'alice',
+            },
+        ]
+    }
+
+
+def test_update_user(client):
+    response = client.put(
+        '/users/1',
+        json={
+            'username': 'bob',
+            'email': 'bob@example.com',
+            'password': '123',
+        },
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'bob',
+        'email': 'bob@example.com',
+        'password': '123',
+    }
+
+
+def test_delete_user(client):
+    response = client.delete('/users/1')
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'bob',
+        'email': 'bob@example.com',
+        'id': 1,
+    }
