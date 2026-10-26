@@ -24,6 +24,7 @@ def test_create_user(session, mock_db_time):
             'email': 'test@test',
             'password': '123',
             'created_at': time,
+            'updated_at': time,
         }
         # asdict transforma um objeto dataclass em dicionario
         # dataclass eh uma forma de gerar uma classe sem escrever

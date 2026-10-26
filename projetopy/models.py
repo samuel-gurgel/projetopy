@@ -21,3 +21,8 @@ class User:
     )
     # func.now faz que quando uma linha for inserida sem valor pra crated_at
     # deve ser preenchido com o horario atual do servidor
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now(), onupdate=func.now()
+    )
+    # recebe o horario de quando eh criado primeiro, e depois ao dar
+    # update recebe o novo horario

@@ -31,20 +31,37 @@ def session():
 
 
 @contextmanager
+# se usa contextmanager quando vc precisa de uma preparacao que deve ser
+# desfeita depois, nesse caso liga o hook pra fixar horario e depois precisa
+# desligar
 def _mock_db_time(*, model, time=datetime(2026, 10, 25)):
     # asterisco obriga passar um model
-    def fake_time_hook(mapper, connection, target):
+    def fake_insert_hook(mapper, connection, target):
+        # roda no INSERT, o campo update_at fica com esse valor ate ter um
+        # update
         if hasattr(target, 'created_at'):
             # hasattr devolve True se o objeto tem o atributo 'created_at'
             # protege caso o model nao tenha esse campo
             target.created_at = time
             # troca o created_at pelo horario fixo antes do INSERT
 
-    event.listen(model, 'before_insert', fake_time_hook)
+        if hasattr(target, 'updated_at'):
+            target.updated_at = time
+
+    def fake_update_hook(mapper, connection, target):
+        # roda no UPDATE, alterando apenas o updated_at
+        if hasattr(target, 'updated_at'):
+            target.updated_at = time
+
+    event.listen(model, 'before_insert', fake_insert_hook)
     # registra o hook pra ser chamado antes de cada INSERT do model
+    event.listen(model, 'before_update', fake_update_hook)
+
     yield time
     # entrega o horario fixo  pra quem usou a funcao
-    event.remove(model, 'before_insert', fake_time_hook)
+
+    event.remove(model, 'before_insert', fake_insert_hook)
+    event.remove(model, 'before_update', fake_update_hook)
     # desregistra o hook pra que nao afete os outros testes
 
 
